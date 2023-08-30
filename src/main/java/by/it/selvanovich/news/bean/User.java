@@ -29,7 +29,7 @@ public class User implements Serializable {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_details_id")
-    private UserDetail userDetail;
+    private UserDetails userDetails;
 
     public User() {
         super();
@@ -67,12 +67,12 @@ public class User implements Serializable {
         this.role = role;
     }
 
-    public UserDetail getUserDetail() {
-        return this.userDetail;
+    public UserDetails getUserDetails() {
+        return this.userDetails;
     }
 
-    public void setUserDetail(UserDetail userDetail) {
-        this.userDetail = userDetail;
+    public void setUserDetails(UserDetails userDetails) {
+        this.userDetails = userDetails;
     }
 
     @Override
@@ -90,6 +90,6 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return this.id + " " + this.username + " " + this.password + " " + this.role + " " + this.userDetail;
+        return this.id + " " + this.username + " " + this.password + " " + this.role + " " + this.userDetails;
     }
 }

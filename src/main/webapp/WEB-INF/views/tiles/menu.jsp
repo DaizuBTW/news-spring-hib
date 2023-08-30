@@ -13,15 +13,17 @@
     <div class="list-menu-invisible-wrapper">
         <hr>
         <div class="list-menu-wrapper">
-            <ul style="list-style-image: url(/images/img.jpg); text-align: left;">
+            <ul style="text-align: left;">
                 <li style="padding-left: 15px;">
 
                     <a href="controller?command=go_to_news_list"><c:out value="${menu_news_list}"/></a><br/>
                 </li>
                 <c:if test="${sessionScope.role eq 'admin'}">
                     <li style="padding-left: 15px;">
-                        <a href="controller?command=go_to_add_news"><c:out value="${menu_add_news}"/></a>
-                        <br/>
+                        <a href="controller?command=go_to_add_news"><c:out value="${menu_add_news}"/></a><br/>
+                    </li>
+                    <li style="padding-left: 15px;">
+                        <a href="userlist"><c:out value="${menu_user_list}"/></a><br/>
                     </li>
                 </c:if>
             </ul>

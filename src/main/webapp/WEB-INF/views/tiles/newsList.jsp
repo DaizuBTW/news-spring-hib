@@ -20,7 +20,7 @@
 	</form>
 </div>
 
-<form action="controller" method="post">
+<form action="doDeleteNews" method="post">
 	<c:forEach var="news" items="${requestScope.news}">
 		<div class="single-news-wrapper">
 			<div class="single-news-header-wrapper">
@@ -38,10 +38,10 @@
 				<div class="news-link-to-wrapper">
 					<div class="link-position">
 						<c:if test="${sessionScope.role eq 'admin'}">
-							<a href="controller?command=go_to_update_news&id=${news.idNews}"><c:out value="${button_update}" /></a>
+							<a href="updateNews?id=${news.idNews}"><c:out value="${button_update}" /></a>
 						</c:if>
 						
-						<a href="controller?command=go_to_view_news&id=${news.idNews}"><c:out value="${button_more}" /></a>
+						<a href="viewNews?id=${news.idNews}"><c:out value="${button_more}" /></a>
    					    
    					    <c:if test="${sessionScope.role eq 'admin'}">
    					         <input type="checkbox" name="id" value="${news.idNews }" />
@@ -55,7 +55,6 @@
 
 	<c:if test="${sessionScope.role eq 'admin'}">
 		<div class="body-button-position">
-				<input type="hidden" name="command" value="do_delete_news" />
 				<input type="submit" value="<c:out value="${button_delete}" />" />
 		</div>
 	</c:if>

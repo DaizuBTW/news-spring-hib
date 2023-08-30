@@ -7,7 +7,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "user_details")
-public class UserDetail implements Serializable {
+public class UserDetails implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -23,11 +23,17 @@ public class UserDetail implements Serializable {
     @Column(name = "surname")
     private String surname;
 
-    @OneToOne(mappedBy = "userDetail", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "userDetails", cascade = CascadeType.ALL)
     private User user;
 
-    public UserDetail() {
+    public UserDetails() {
         super();
+    }
+
+    public UserDetails(String name, String surname) {
+        super();
+        this.name = name;
+        this.surname = surname;
     }
 
     public int getId() {
@@ -66,7 +72,7 @@ public class UserDetail implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserDetail userDetail = (UserDetail) o;
+        UserDetails userDetail = (UserDetails) o;
         return Objects.equals(id, userDetail.id) && Objects.equals(name, userDetail.name) && Objects.equals(surname, userDetail.surname);
     }
 

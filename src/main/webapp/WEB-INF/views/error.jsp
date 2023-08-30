@@ -9,7 +9,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Error</title>
-    <link rel="stylesheet" type="text/css" href="styles/newsStyle.css">
+    <link rel="stylesheet" type="text/css" href="sources/css/newsStyle.css">
 </head>
     <body>
         <div class="error-page">

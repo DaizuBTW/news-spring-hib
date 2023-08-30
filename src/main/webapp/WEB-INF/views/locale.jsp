@@ -39,6 +39,7 @@
 	<fmt:message bundle="${loc}" key="local.menu.button.add" var="menu_add_news" />
 	<fmt:message bundle="${loc}" key="local.menu.button.list" var="menu_news_list" />
 	<fmt:message bundle="${loc}" key="local.menu.button.latest" var="menu_latest_news" />
+	<fmt:message bundle="${loc}" key="local.menu.label.users" var="menu_user_list" />
 
 	<fmt:message bundle="${loc}" key="local.body.button.delete" var="button_delete" />
 	<fmt:message bundle="${loc}" key="local.body.button.add" var="button_add" />

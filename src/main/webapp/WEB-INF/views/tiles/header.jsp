@@ -30,8 +30,7 @@
             <div align="right">
                 <p class="name"><c:out value="${sessionScope.name}"/> <c:out value="${sessionScope.surname}"/></p>
                 <p class="username"><c:out value="${sessionScope.username}"/> (<c:out value="${sessionScope.role}"/>)</p><br/>
-                <form action="controller" method="post">
-                    <input type="hidden" name="command" value="do_sign_out"/>
+                <form action="signOut" method="post">
                     <input type="submit" value="<c:out value="${header_singout}" />"/><br/>
                 </form>
             </div>

@@ -1,5 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <%@ include file="/WEB-INF/views/locale.jsp" %>
 <div class="overlay" id="signin">
@@ -37,34 +39,30 @@
         <div class="login-content">
             <a href="#" class="close">x</a>
             <h3><c:out value="${popup_label_register}"/></h3>
-            <form class="pop-up" action="controller" method="post">
-                <input type="hidden" name="command" value="do_registration"/>
-                <label for="username">
+            <form:form class="pop-up" action="registration" modelAttribute="user" method="post">
+                <form:label  path="username">
                     <p class="label_popup"><c:out value="${popup_login}"/></p>
-                    <input type="text" name="username"
-                           placeholder="<c:out value="${popup_login}" />"/>
-                </label>
-                <label for="password">
+                    <form:input type="text" path="username"/>
+                </form:label>
+                <form:label for="password" path="password">
                     <p class="label_popup"><c:out value="${popup_password}"/></p>
-                    <input type="password" name="password"
-                           placeholder="<c:out value="${popup_password}" />"/>
-                </label>
-                <label for="name">
+                    <form:input type="password" name="password" path="password"/>
+                </form:label>
+                <form:label for="name" path="userDetails.name">
                     <p class="label_popup"><c:out value="${popup_name}"/></p>
-                    <input type="text" name="name" id="name" placeholder="<c:out value="${popup_name}" />"/>
-                </label>
-                <label for="surname">
+                    <form:input type="text" name="name" id="name" path="userDetails.name"/>
+                </form:label>
+                <form:label for="surname" path="userDetails.surname">
                     <p class="label_popup"><c:out value="${popup_surname}"/></p>
-                    <input type="text" name="surname" id="surname"
-                           placeholder="<c:out value="${popup_surname}" />"/>
-                </label>
+                    <form:input type="text" name="surname" id="surname" path="userDetails.surname"/>
+                </form:label>
                 <c:if test="${not (requestScope.AuthenticationError eq null)}">
                     <font color="red">
                         <c:out value="${login_error}" />
                     </font>
                 </c:if>
-                <input type="submit" name="log-in" value="<c:out value="${popup_btn_register}" />">
-            </form>
+                <input type="submit" name="log-in" value="${popup_btn_register}"/>
+            </form:form>
         </div>
     </div>
 </div>
