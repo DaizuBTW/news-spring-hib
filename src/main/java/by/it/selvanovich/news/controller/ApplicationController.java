@@ -124,34 +124,19 @@ public class ApplicationController {
         return "redirect:" + MAPPING_MAIN;
     }
 
-    @RequestMapping("/registration1")
-    public String registration(HttpServletRequest request) {
-        String username = request.getParameter(JSP_USERNAME_PARAM);
-        String password = request.getParameter(JSP_PASSWORD_PARAM);
-        String name = request.getParameter(JSP_NAME_PARAM);
-        String surname = request.getParameter(JSP_SURNAME_PARAM);
-
+    @RequestMapping(value = "/registration", method = RequestMethod.POST)
+    public String signUp(@ModelAttribute("user") User user, HttpServletRequest request) {
         try {
-            User user = new User();
-            UserDetails userDetails = new UserDetails(name, surname);
-            Role role = new Role(3, "user");
-
-            user.setUsername(username);
-            user.setPassword(password);
-            user.setUserDetails(userDetails);
-            user.setRole(role);
-
             if (userService.registration(user)) {
                 request.getSession(true).setAttribute("user", "active");
                 request.getSession().setAttribute("role", "user");
-                request.getSession().setAttribute("username", username);
-                request.getSession().setAttribute("name", name);
-                request.getSession().setAttribute("surname", surname);
+                request.getSession().setAttribute("username", user.getUsername());
+                request.getSession().setAttribute("name", user.getUserDetails().getName());
+                request.getSession().setAttribute("surname", user.getUserDetails().getSurname());
                 System.out.println("Success!");
 
             } else {
-                request.setAttribute("error", "local.error.name.reg_error");
-                System.out.println("errrrrr");
+                request.getSession().setAttribute("error", "local.error.name.reg_error");
             }
             return "redirect:" + MAPPING_MAIN;
         } catch (ServiceException e) {
@@ -160,23 +145,6 @@ public class ApplicationController {
 
             return ERROR;
         }
-    }
-
-    @RequestMapping(value = "/registration", method = RequestMethod.POST)
-    public String signUp(@ModelAttribute("user") User user, HttpServletRequest request) throws ServiceException {
-        if (userService.registration(user)) {
-            request.getSession(true).setAttribute("user", "active");
-            request.getSession().setAttribute("role", "user");
-            request.getSession().setAttribute("username", user.getUsername());
-            request.getSession().setAttribute("name", user.getUserDetails().getName());
-            request.getSession().setAttribute("surname", user.getUserDetails().getSurname());
-            System.out.println("Success!");
-
-        } else {
-            request.setAttribute("error", "local.error.name.reg_error");
-            System.out.println("errrrrr");
-        }
-        return "redirect:" + MAPPING_MAIN;
     }
 
     @RequestMapping(value = "/userlist")
