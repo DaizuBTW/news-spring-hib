@@ -11,9 +11,7 @@ import by.it.selvanovich.news.util.validator.ValidatorProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -136,7 +134,7 @@ public class ApplicationController {
                 System.out.println("Success!");
 
             } else {
-                request.getSession().setAttribute("error", "local.error.name.reg_error");
+                request.getSession(true).setAttribute(ERROR, "local.error.name.reg_error");
             }
             return "redirect:" + MAPPING_MAIN;
         } catch (ServiceException e) {
@@ -158,5 +156,12 @@ public class ApplicationController {
             throw new RuntimeException(e);
         }
         return BASE_LAYOUT;
+    }
+
+    @RequestMapping("/localization")
+    public String localization(@RequestParam(required = false, value= "local") String local, HttpServletRequest request) {
+        request.getSession(true).setAttribute("local", local);
+
+        return "redirect:" + MAPPING_MAIN;
     }
 }

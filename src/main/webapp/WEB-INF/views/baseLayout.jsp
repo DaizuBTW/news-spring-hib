@@ -45,8 +45,8 @@
                     </div>
                 </div>
                 <div class="menu-lang">
-                    <a href="controller?command=do_localization&local=en"> <c:out value="${en_button}"/> </a>
-                    <a href="controller?command=do_localization&local=ru"> <c:out value="${ru_button}"/> </a>
+                    <a href="localization?local=en"> <c:out value="${en_button}"/> </a>
+                    <a href="localization?local=ru"> <c:out value="${ru_button}"/> </a>
                 </div>
                 <c:if test="${not (requestScope.error eq null)}">
                     <div class="menu-wrapper-error">
