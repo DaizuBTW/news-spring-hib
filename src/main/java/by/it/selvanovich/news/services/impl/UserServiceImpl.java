@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
         try {
             return userDAO.getUserList();
         } catch (DAOException e) {
-            throw new ServiceException("Services getting problems with user list", e);
+            throw new ServiceException("Services are getting problems with user list", e);
         }
     }
 }

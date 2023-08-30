@@ -32,7 +32,7 @@
     <div class="base-layout-wrapper">
         <div class="menu">
 
-            <c:if test="${not (sessionScope.user eq 'active')}">
+            <c:if test="${not (sessionScope.user_status eq 'active')}">
                 <div class="menu-wrapper">
                     <div class="menu-title-wrapper">
                         <div class="menu-title">
@@ -58,7 +58,7 @@
                 </c:if>
                 <%-- <c:import url=""></c:import> --%>
             </c:if>
-            <c:if test="${sessionScope.user eq 'active'}">
+            <c:if test="${sessionScope.user_status eq 'active'}">
                 <c:import url="/WEB-INF/views/tiles/menu.jsp"/>
             </c:if>
         </div>
@@ -66,10 +66,10 @@
         <div class="content">
 
 
-            <c:if test="${not (sessionScope.user eq 'active')}">
+            <c:if test="${not (sessionScope.user_status eq 'active')}">
                 <c:import url="/WEB-INF/views/tiles/guestInfo.jsp"/>
             </c:if>
-            <c:if test="${sessionScope.user eq 'active'}">
+            <c:if test="${sessionScope.user_status eq 'active'}">
                 <c:import url="/WEB-INF/views/tiles/${presentation}.jsp"/>
             </c:if>
 

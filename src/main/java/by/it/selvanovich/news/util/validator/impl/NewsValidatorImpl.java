@@ -47,7 +47,7 @@ public class NewsValidatorImpl implements NewsValidator {
     @Override
     public boolean isNewsValid(News news) {
         return isTitleValid(news.getTitle()) &&
-                isBriefValid(news.getBriefNews()) &&
+                isBriefValid(news.getBrief()) &&
                 isContentValid(news.getContent());
     }
 }

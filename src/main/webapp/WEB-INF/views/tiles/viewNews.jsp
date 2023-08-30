@@ -37,7 +37,7 @@
 </div>
 
 
-<c:if test="${sessionScope.role eq 'admin'}">
+<c:if test="${sessionScope.user.role.title eq 'admin'}">
 <div class="first-view-button">
 	<form action="controller" method="post">
 		<input type="hidden" name="command" value="go_to_update_news" /> <input

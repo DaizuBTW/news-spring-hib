@@ -23,7 +23,7 @@
 	</c:forEach>
 
 
-	<c:if test="${sessionScope.role eq 'admin'}">
+	<c:if test="${sessionScope.user.role.title eq 'admin'}">
 		<div class="body-button-position">
 				<input type="submit" value="<c:out value="${button_delete}" />" />
 		</div>

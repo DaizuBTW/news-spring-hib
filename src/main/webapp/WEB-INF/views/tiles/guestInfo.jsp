@@ -10,19 +10,18 @@
 </div>
 
 <form action="command.do?method=delete" method="post">
-    <c:forEach var="news" items="${requestScope.news}">
+    <c:forEach var="news" items="${requestScope.newsList}">
         <div class="single-news-wrapper">
             <div class="single-news-header-wrapper">
                 <div class="news-title">
-                    <p class="category"><c:out value="${news.category}" /></p>
                     <h2><c:out value="${news.title}"/></h2>
                 </div>
                 <div class="news-date">
-                    <c:out value="${news.newsDate}"/>
+                    <c:out value="${news.date}"/>
                 </div>
 
                 <div class="news-content">
-                    <c:out value="${news.briefNews}"/>
+                    <c:out value="${news.brief}"/>
                 </div>
             </div>
         </div>
@@ -30,7 +29,7 @@
     </c:forEach>
 
     <div class="no-news">
-        <c:if test="${requestScope.news eq null}">
+        <c:if test="${requestScope.newsList eq null}">
             No news.
         </c:if>
     </div>

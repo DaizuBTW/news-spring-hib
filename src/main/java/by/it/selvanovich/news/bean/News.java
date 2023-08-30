@@ -28,7 +28,7 @@ public class News implements Serializable {
     private String content;
 
     @Column(name = "date")
-    private Date date;
+    private String date;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "users_id")
@@ -38,11 +38,11 @@ public class News implements Serializable {
         super();
     }
 
-    public Integer getIdNews() {
+    public Integer getId() {
         return id;
     }
 
-    public void setIdNews(Integer id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -54,11 +54,11 @@ public class News implements Serializable {
         this.title = title;
     }
 
-    public String getBriefNews() {
+    public String getBrief() {
         return brief;
     }
 
-    public void setBriefNews(String brief) {
+    public void setBrief(String brief) {
         this.brief = brief;
     }
 
@@ -71,11 +71,11 @@ public class News implements Serializable {
 
     }
 
-    public Date getNewsDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setNewsDate(Date newsDate) {
+    public void setDate(String newsDate) {
         this.date = newsDate;
     }
 

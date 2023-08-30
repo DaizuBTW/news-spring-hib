@@ -4,6 +4,7 @@ import by.it.selvanovich.news.bean.News;
 import by.it.selvanovich.news.bean.Role;
 import by.it.selvanovich.news.bean.User;
 import by.it.selvanovich.news.bean.UserDetails;
+import by.it.selvanovich.news.services.NewsService;
 import by.it.selvanovich.news.services.ServiceException;
 import by.it.selvanovich.news.services.UserService;
 import by.it.selvanovich.news.util.validator.SecurityAccess;
@@ -50,6 +51,8 @@ public class ApplicationController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private NewsService newsService;
     private final SecurityAccess accessValidation = ValidatorProvider.getInstance().getSecurityAccess();
 
     @ModelAttribute("user")
@@ -63,18 +66,30 @@ public class ApplicationController {
         return user;
     }
 
+    @ModelAttribute("news")
+    private News insertNewsInModel() {
+        News news = new News();
+        news.setUser(new User());
+        return news;
+    }
+
     @RequestMapping("/main")
     public String main(HttpServletRequest request, Model model) {
         HttpSession session = request.getSession();
         String presentation = request.getParameter(MAPPING_PARAM);
 
-        List<News> newsList = new ArrayList<>();
+        try {
 
-        if (accessValidation.haveAuthorizedUser(session)) {
-            model.addAttribute(MAPPING_PARAM, Objects.requireNonNullElse(presentation, MAPPING_NEWS_LIST));
-        } else {
-            model.addAttribute(MAPPING_PARAM, MAPPING_GUEST_INFO);
-            request.setAttribute("news", newsList);
+            if (accessValidation.haveAuthorizedUser(session)) {
+                model.addAttribute(MAPPING_PARAM, Objects.requireNonNullElse(presentation, MAPPING_NEWS_LIST));
+                request.setAttribute("newsList", newsService.getList());
+            } else {
+                model.addAttribute(MAPPING_PARAM, MAPPING_GUEST_INFO);
+
+                request.setAttribute("newsList", newsService.getList());
+            }
+        } catch (ServiceException e) {
+            throw new RuntimeException(e);
         }
         return BASE_LAYOUT;
     }
@@ -86,18 +101,17 @@ public class ApplicationController {
         String password = request.getParameter(JSP_PASSWORD_PARAM);
 
         try {
-            String role = "guest";
             User user = userService.authorization(username, password);
+            String role = "guest";
             if (user != null) {
                 role = user.getRole().getTitle();
             }
 
             if (!role.equals("guest")) {
-                request.getSession(true).setAttribute("user", "active");
+                request.getSession(true).setAttribute("user_status", "active");
+                request.getSession().setAttribute("user_status", "active");
                 request.getSession().setAttribute("role", role);
-                request.getSession().setAttribute("username", username);
-                request.getSession().setAttribute("name", user.getUserDetails().getName());
-                request.getSession().setAttribute("surname", user.getUserDetails().getSurname());
+                request.getSession().setAttribute("user", user);
 
                 return "redirect:" + MAPPING_MAIN;
             } else {
@@ -115,8 +129,9 @@ public class ApplicationController {
 
     @RequestMapping("/signOut")
     public String doSignOut(HttpServletRequest request) {
+        System.out.println(request.getParameter("user_id"));
 
-        request.getSession(true).setAttribute("user", "not active");
+        request.getSession(true).setAttribute("user_status", "not active");
         request.getSession().setAttribute("role", null);
 
         return "redirect:" + MAPPING_MAIN;
@@ -126,11 +141,8 @@ public class ApplicationController {
     public String signUp(@ModelAttribute("user") User user, HttpServletRequest request) {
         try {
             if (userService.registration(user)) {
-                request.getSession(true).setAttribute("user", "active");
-                request.getSession().setAttribute("role", "user");
-                request.getSession().setAttribute("username", user.getUsername());
-                request.getSession().setAttribute("name", user.getUserDetails().getName());
-                request.getSession().setAttribute("surname", user.getUserDetails().getSurname());
+                request.getSession(true).setAttribute("user_status", "active");
+                request.getSession(true).setAttribute("user", user);
                 System.out.println("Success!");
 
             } else {
@@ -159,9 +171,45 @@ public class ApplicationController {
     }
 
     @RequestMapping("/localization")
-    public String localization(@RequestParam(required = false, value= "local") String local, HttpServletRequest request) {
+    public String localization(@RequestParam(required = false, value = "local") String local, HttpServletRequest request) {
         request.getSession(true).setAttribute("local", local);
 
         return "redirect:" + MAPPING_MAIN;
+    }
+
+    @RequestMapping("addNews")
+    public String goToAddNews(HttpServletRequest request, Model model) {
+
+        HttpSession session = request.getSession();
+
+        if (accessValidation.haveAdminPermissions(session)) {
+            model.addAttribute(MAPPING_PARAM, MAPPING_ADD_NEWS);
+        } else {
+            request.setAttribute(ERROR, "local.error.name.access_error");
+        }
+        return BASE_LAYOUT;
+
+    }
+
+    @RequestMapping("doAddNews")
+    public String doAddNews(@ModelAttribute("news") News news, HttpServletRequest request, Model model) {
+        int userId = Integer.parseInt(request.getParameter("user_id"));
+        HttpSession session = request.getSession(false);
+
+        news.getUser().setId(userId);
+        String title = request.getParameter(JSP_TITLE_PARAM);
+        String date = request.getParameter(JSP_DATE_PARAM);
+        String brief = request.getParameter(JSP_BRIEF_PARAM);
+        String content = request.getParameter(JSP_CONTENT_PARAM);
+        String category = request.getParameter(JSP_CATEGORY_PARAM);
+
+        try {
+            newsService.addNews(news);
+        } catch (ServiceException e) {
+            throw new RuntimeException(e);
+        }
+        return "redirect:" + MAPPING_MAIN;
+
+
     }
 }

@@ -8,7 +8,7 @@
 
 
     <div class="local-link">
-        <c:if test="${not (sessionScope.user eq 'active')}">
+        <c:if test="${not (sessionScope.user_status eq 'active')}">
 
             <div align="right">
                 <a href="#signin" class="overlayLink" ><c:out value="${popup_btn_enter}"/></a>
@@ -25,11 +25,11 @@
 
         </c:if>
 
-        <c:if test="${sessionScope.user eq 'active'}">
+        <c:if test="${sessionScope.user_status eq 'active'}">
 
             <div align="right">
-                <p class="name"><c:out value="${sessionScope.name}"/> <c:out value="${sessionScope.surname}"/></p>
-                <p class="username"><c:out value="${sessionScope.username}"/> (<c:out value="${sessionScope.role}"/>)</p><br/>
+                <p class="name">${sessionScope.user.userDetails.name} <c:out value="${sessionScope.user.userDetails.surname}"/></p>
+                <p class="username"><c:out value="${sessionScope.user.username}"/> (<c:out value="${sessionScope.user.role.title}"/>)</p><br/>
                 <form action="signOut" method="post">
                     <input type="submit" value="<c:out value="${header_singout}" />"/><br/>
                 </form>

@@ -21,30 +21,29 @@
 </div>
 
 <form action="doDeleteNews" method="post">
-	<c:forEach var="news" items="${requestScope.news}">
+	<c:forEach var="news" items="${requestScope.newsList}">
 		<div class="single-news-wrapper">
 			<div class="single-news-header-wrapper">
 				<div class="news-title">
-					<p class="category"><c:out value="${news.category}" /></p>
 					<h2><c:out value="${news.title}" /></h2>
 				</div>
 				<div class="news-date">
-					<c:out value="${news.newsDate}" />
+					<c:out value="${news.date}" />
 				</div>
 
 				<div class="news-content">
-					<c:out value="${news.briefNews}" />
+					<c:out value="${news.brief}" />
 				</div>
 				<div class="news-link-to-wrapper">
 					<div class="link-position">
-						<c:if test="${sessionScope.role eq 'admin'}">
-							<a href="updateNews?id=${news.idNews}"><c:out value="${button_update}" /></a>
+						<c:if test="${sessionScope.user.role.title eq 'admin'}">
+							<a href="updateNews?id=${news.id}"><c:out value="${button_update}" /></a>
 						</c:if>
 						
-						<a href="viewNews?id=${news.idNews}"><c:out value="${button_more}" /></a>
+						<a href="viewNews?id=${news.id}"><c:out value="${button_more}" /></a>
    					    
-   					    <c:if test="${sessionScope.role eq 'admin'}">
-   					         <input type="checkbox" name="id" value="${news.idNews }" />
+   					    <c:if test="${sessionScope.user.role.title eq 'admin'}">
+   					         <input type="checkbox" name="id" value="${news.id }" />
    					    </c:if>
 					</div>
 				</div>
@@ -53,7 +52,7 @@
 	</c:forEach>
 
 
-	<c:if test="${sessionScope.role eq 'admin'}">
+	<c:if test="${sessionScope.user.role.title eq 'admin'}">
 		<div class="body-button-position">
 				<input type="submit" value="<c:out value="${button_delete}" />" />
 		</div>

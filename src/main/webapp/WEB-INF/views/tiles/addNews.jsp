@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <%@ include file="/WEB-INF/views/locale.jsp" %>
 
@@ -9,27 +10,25 @@
 </div>
 
 <div class="add-table-margin">
-    <form action="controller" method="post">
+    <form:form action="doAddNews" modelAttribute="news" method="post">
         <div class="news-wrapper">
-            <label for="title">
+            <form:label path="title">
                 <p class="label_popup"><c:out value="${news_title}"/></p>
-                <textarea name="title" cols="40" rows="3" id="title" required
-                          placeholder="<c:out value="${requestScope.news.title }" />"></textarea>
-            </label>
-            <label for="date">
+                <form:textarea path="title" cols="40" rows="3" id="title"/>
+            </form:label>
+            <form:label path="date">
                 <p class="label_popup"><c:out value="${news_date}" /></p>
-                <input type="datetime-local" name="date" id="date" required>
-            </label>
-            <label for="brief">
+                <form:input type="datetime-local" path="date" id="date"/>
+            </form:label>
+            <form:label path="brief">
                 <p class="label_popup"><c:out value="${news_brief}" /></p>
-                <textarea name="brief" cols="40" rows="5" id="brief" required
-                          placeholder="<c:out value="${requestScope.news.briefNews }" />"></textarea>
-            </label>
-            <label for="content">
+                <form:textarea path="brief" cols="40" rows="5" id="brief"/>
+            </form:label>
+            <form:label path="content">
                 <p class="label_popup"><c:out value="${news_content}" /></p>
-                <textarea name="content" cols="40" rows="15" id="content" required
-                          placeholder="<c:out value="${requestScope.news.content }" />"></textarea>
-            </label>
+                <form:textarea path="content" cols="40" rows="15" id="content"/>
+            </form:label>
+            <!--
             <label for="category">
                 <p class="label_popup"><c:out value="${category_label}" /></p>
                 <select name="category" id="category">
@@ -38,6 +37,7 @@
                     <option value="3"><c:out value="${weather}" /></option>
                 </select>
             </label>
+            -->
         </div>
         <c:if test="${not (requestScope.newsError eq null)}">
             <div class="menu-wrapper-error">
@@ -48,8 +48,8 @@
             </div>
         </c:if>
         <div class="body-button-position">
-            <input type="hidden" name="command" value="do_add_news" />
+            <input type="hidden" name="user_id" value="<c:out value="${sessionScope.user.id}"/>" />
             <input type="submit" value="<c:out value="${button_add}" />" />
         </div>
-    </form>
+    </form:form>
 </div>
