@@ -48,15 +48,14 @@
                     <a href="localization?local=en"> <c:out value="${en_button}"/> </a>
                     <a href="localization?local=ru"> <c:out value="${ru_button}"/> </a>
                 </div>
-                <c:if test="${not (requestScope.error eq null)}">
+                <c:if test="${not (sessionScope.error eq null)}">
                     <div class="menu-wrapper-error">
                         <p>
-                            <fmt:message bundle="${loc}" key="${requestScope.error}" var="error_message"/>
+                            <fmt:message bundle="${loc}" key="${sessionScope.error}" var="error_message"/>
                             <c:out value="${error_message}"/>
                         </p>
                     </div>
                 </c:if>
-                <%-- <c:import url=""></c:import> --%>
             </c:if>
             <c:if test="${sessionScope.user_status eq 'active'}">
                 <c:import url="/WEB-INF/views/tiles/menu.jsp"/>
@@ -64,17 +63,12 @@
         </div>
 
         <div class="content">
-
-
             <c:if test="${not (sessionScope.user_status eq 'active')}">
                 <c:import url="/WEB-INF/views/tiles/guestInfo.jsp"/>
             </c:if>
             <c:if test="${sessionScope.user_status eq 'active'}">
                 <c:import url="/WEB-INF/views/tiles/${presentation}.jsp"/>
             </c:if>
-
-
-
         </div>
     </div>
 
@@ -84,14 +78,6 @@
     </div>
 </div>
 <c:import url="/WEB-INF/views/tiles/forms.jsp"/>
-<!--
-<div class="overlay" style="display: none;">
-    <div class="login-wrapper">
-        <div class="login-content" id="loginTarget">
-        </div>
-    </div>
-</div>
--->
 </body>
 
 </html>

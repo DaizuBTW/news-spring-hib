@@ -23,11 +23,6 @@
                            placeholder="<c:out value="${header_password}" />"/>
                 </label>
                 <input type="submit" name="log-in" value="<c:out value="${popup_btn_enter}" />">
-                <c:if test="${not (requestScope.AuthenticationError eq null)}">
-                    <font color="red">
-                        <c:out value="${login_error}" />
-                    </font>
-                </c:if>
             </form>
         </div>
     </div>
@@ -56,11 +51,6 @@
                     <p class="label_popup"><c:out value="${popup_surname}"/></p>
                     <form:input type="text" name="surname" id="surname" path="userDetails.surname"/>
                 </form:label>
-                <c:if test="${not (requestScope.AuthenticationError eq null)}">
-                    <font color="red">
-                        <c:out value="${login_error}" />
-                    </font>
-                </c:if>
                 <input type="submit" name="log-in" value="${popup_btn_register}"/>
             </form:form>
         </div>

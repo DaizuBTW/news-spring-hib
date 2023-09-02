@@ -54,7 +54,7 @@ public class NewsServiceImpl implements NewsService {
                 newsDAO.addNews(news);
                 return true;
             } else {
-                throw new ServiceException("This news has not been verified. Incorrect data was entered. Adding is not possible.");
+                return false;
             }
         } catch (DAOException e) {
             throw new ServiceException("Services are getting problems with adding news", e);
@@ -71,7 +71,7 @@ public class NewsServiceImpl implements NewsService {
                 newsDAO.updateNews(news);
                 return true;
             } else {
-                throw new ServiceException("This news did not pass verification. Incorrect data was entered. The update is not possible.");
+                return false;
             }
         } catch (DAOException e) {
             throw new ServiceException("Services are getting problems with updating news", e);

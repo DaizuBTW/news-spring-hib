@@ -16,7 +16,7 @@
             <ul style="text-align: left;">
                 <li style="padding-left: 15px;">
 
-                    <a href="controller?command=go_to_news_list"><c:out value="${menu_news_list}"/></a><br/>
+                    <a href="newsList"><c:out value="${menu_news_list}"/></a><br/>
                 </li>
                 <c:if test="${sessionScope.user.role.title eq 'admin'}">
                     <li style="padding-left: 15px;">
@@ -36,12 +36,13 @@
     <a href="localization?local=en"> <c:out value="${en_button}"/> </a>
     <a href="localization?local=ru"> <c:out value="${ru_button}"/> </a>
 </div>
-<c:if test="${not (requestScope.error eq null)}">
+<c:if test="${not (sessionScope.error eq null)}">
     <div class="menu-wrapper-error">
         <p>
-            <fmt:message bundle="${loc}" key="${requestScope.error}" var="error_message"/>
+            <fmt:message bundle="${loc}" key="${sessionScope.error}" var="error_message"/>
             <c:out value="${error_message}"/>
         </p>
     </div>
 </c:if>
+
 
