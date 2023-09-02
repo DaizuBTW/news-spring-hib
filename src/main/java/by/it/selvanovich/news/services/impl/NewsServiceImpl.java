@@ -24,11 +24,6 @@ public class NewsServiceImpl implements NewsService {
     private NewsDAO newsDAO;
 
     @Transactional
-    public boolean update(int id, String title, String brief, String content, String date, String category) throws ServiceException {
-        return false;
-    }
-
-    @Transactional
     public List<News> latestList(int count) throws ServiceException {
         return null;
     }
@@ -44,7 +39,11 @@ public class NewsServiceImpl implements NewsService {
 
     @Transactional
     public News findById(int id) throws ServiceException {
-        return null;
+        try {
+            return newsDAO.findById(id);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
     }
 
     @Transactional
@@ -55,10 +54,27 @@ public class NewsServiceImpl implements NewsService {
                 newsDAO.addNews(news);
                 return true;
             } else {
-                return false;
+                throw new ServiceException("This news has not been verified. Incorrect data was entered. Adding is not possible.");
             }
         } catch (DAOException e) {
             throw new ServiceException("Services are getting problems with adding news", e);
+        } finally {
+            locker.unlock();
+        }
+    }
+
+    @Transactional
+    public boolean update(News news) throws ServiceException {
+        locker.lock();
+        try {
+            if (newsValidator.isNewsValid(news)) {
+                newsDAO.updateNews(news);
+                return true;
+            } else {
+                throw new ServiceException("This news did not pass verification. Incorrect data was entered. The update is not possible.");
+            }
+        } catch (DAOException e) {
+            throw new ServiceException("Services are getting problems with updating news", e);
         } finally {
             locker.unlock();
         }

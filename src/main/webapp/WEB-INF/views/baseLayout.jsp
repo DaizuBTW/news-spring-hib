@@ -16,7 +16,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script type="text/javascript" src="sources/js/validation.js"></script>
-    <link rel="shortcut icon" href="../../../news_project_war/images/<c:out value="${icon}"/>" type="image/png">
+    <link rel="shortcut icon" href="sources/images/<c:out value="${icon}"/>" type="image/png">
     <title><c:out value="${page_title}"/></title>
 
     <link rel="stylesheet" type="text/css" href="sources/css/newsStyle.css">

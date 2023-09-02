@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface NewsService {
 
-    boolean update(int id, String title, String brief, String content, String date, String category) throws ServiceException;
+    boolean update(News news) throws ServiceException;
 
     List<News> latestList(int count) throws ServiceException;
 

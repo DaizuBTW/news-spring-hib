@@ -10,11 +10,11 @@ public interface NewsDAO {
 
     List<News> getLatestList(int count) throws DAOException;
 
-    News fetchById(int id) throws DAOException;
+    News findById(int id) throws DAOException;
 
     int addNews(News news) throws DAOException;
 
-    void updateNews(int id, News news) throws DAOException;
+    void updateNews(News news) throws DAOException;
 
     void deleteNewses(String[] idNewses) throws DAOException;
 

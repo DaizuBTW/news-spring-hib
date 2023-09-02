@@ -42,8 +42,6 @@ public class ApplicationController {
     private static final String MAPPING_VIEW_NEWS = "viewNews";
     private static final String MAPPING_ADD_NEWS = "addNews";
     private static final String MAPPING_UPDATE_NEWS = "updateNews";
-    private static final String MAPPING_SIGN_IN = "signIn";
-    private static final String MAPPING_SIGN_OUT = "signOut";
     private static final String MAPPING_GUEST_INFO = "guestInfo";
     private static final String MAPPING_PARAM = "presentation";
     private static final String ERROR = "error";
@@ -177,6 +175,28 @@ public class ApplicationController {
         return "redirect:" + MAPPING_MAIN;
     }
 
+    @RequestMapping("viewNews")
+    public String viewNews(HttpServletRequest request, Model model) {
+        String id = request.getParameter(JSP_ID_PARAM);
+
+        HttpSession session = request.getSession();
+
+        try {
+            if (accessValidation.haveAuthorizedUser(session)) {
+                News news = newsService.findById(Integer.parseInt(id));
+                request.getSession().setAttribute("news", news);
+                model.addAttribute(MAPPING_PARAM, MAPPING_VIEW_NEWS);
+                return BASE_LAYOUT;
+            } else {
+                return "redirect:" + MAPPING_NEWS_LIST;
+            }
+        } catch (ServiceException e) {
+            e.printStackTrace();
+
+            return "redirect:" + ERROR;
+        }
+    }
+
     @RequestMapping("addNews")
     public String goToAddNews(HttpServletRequest request, Model model) {
 
@@ -192,17 +212,9 @@ public class ApplicationController {
     }
 
     @RequestMapping("doAddNews")
-    public String doAddNews(@ModelAttribute("news") News news, HttpServletRequest request, Model model) {
+    public String doAddNews(@ModelAttribute("news") News news, HttpServletRequest request) {
         int userId = Integer.parseInt(request.getParameter("user_id"));
-        HttpSession session = request.getSession(false);
-
         news.getUser().setId(userId);
-        String title = request.getParameter(JSP_TITLE_PARAM);
-        String date = request.getParameter(JSP_DATE_PARAM);
-        String brief = request.getParameter(JSP_BRIEF_PARAM);
-        String content = request.getParameter(JSP_CONTENT_PARAM);
-        String category = request.getParameter(JSP_CATEGORY_PARAM);
-
         try {
             newsService.addNews(news);
         } catch (ServiceException e) {
@@ -211,5 +223,60 @@ public class ApplicationController {
         return "redirect:" + MAPPING_MAIN;
 
 
+    }
+
+    @RequestMapping("updateNews")
+    public String goToUpdateNews(HttpServletRequest request, Model model) {
+
+        String id = request.getParameter(JSP_ID_PARAM);
+        System.out.println(id);
+
+        HttpSession session = request.getSession();
+
+        try {
+            if (accessValidation.haveAdminPermissions(session)) {
+                News news = newsService.findById(Integer.parseInt(id));
+                request.getSession().setAttribute("news", news);
+                model.addAttribute(MAPPING_PARAM, MAPPING_UPDATE_NEWS);
+            } else {
+                request.setAttribute(ERROR, "local.error.name.access_error");
+
+            }
+            return BASE_LAYOUT;
+        } catch (ServiceException e) {
+            e.printStackTrace();
+
+            return "redirect:" + ERROR;
+        }
+    }
+
+    @RequestMapping("doUpdateNews")
+    public String doUpdateNews(@ModelAttribute("news") News news, HttpServletRequest request) {
+
+        int userId = Integer.parseInt(request.getParameter("user_id"));
+        news.getUser().setId(userId);
+        System.out.println(news.getId());
+
+        HttpSession session = request.getSession();
+
+        try {
+            if (accessValidation.haveAdminPermissions(session)) {
+                if (newsService.update(news)) {
+                    return "redirect:" + MAPPING_VIEW_NEWS + "?id=" + news.getId();
+                } else {
+                    request.setAttribute("newsError", "local.error.name.news_error");
+
+                    return MAPPING_UPDATE_NEWS;
+                }
+            } else {
+                request.setAttribute(ERROR, "local.error.name.access_error");
+
+                return BASE_LAYOUT;
+            }
+        } catch (ServiceException e) {
+            e.printStackTrace();
+
+            return "redirect:" + ERROR;
+        }
     }
 }

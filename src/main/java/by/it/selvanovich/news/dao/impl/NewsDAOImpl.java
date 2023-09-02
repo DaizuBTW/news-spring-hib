@@ -3,6 +3,7 @@ package by.it.selvanovich.news.dao.impl;
 import by.it.selvanovich.news.bean.News;
 import by.it.selvanovich.news.dao.DAOException;
 import by.it.selvanovich.news.dao.NewsDAO;
+import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -63,8 +64,18 @@ public class NewsDAOImpl implements NewsDAO {
     }
 
     @Override
-    public News fetchById(int id) throws DAOException {
-        return null;
+    public News findById(int id) throws DAOException {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
+            News news = currentSession
+                    .createQuery("SELECT n FROM News n INNER JOIN FETCH n.user WHERE n.id = :id", News.class)
+                    .setParameter("id", id)
+                    .uniqueResult();
+
+            return news;
+        }  catch (HibernateException e) {
+            throw new DAOException("Hibernate error", e);
+        }
     }
 
     @Override
@@ -79,8 +90,14 @@ public class NewsDAOImpl implements NewsDAO {
     }
 
     @Override
-    public void updateNews(int id, News news) throws DAOException {
+    public void updateNews(News news) throws DAOException {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
 
+            currentSession.update(news);
+        }  catch (HibernateException e) {
+            throw new DAOException("Hibernate are getting problems with news updating", e);
+        }
     }
 
     @Override
