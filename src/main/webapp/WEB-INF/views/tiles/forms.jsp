@@ -1,7 +1,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@page pageEncoding="UTF-8" %>
 
 <%@ include file="/WEB-INF/views/locale.jsp" %>
 <div class="overlay" id="signin">
@@ -35,7 +36,7 @@
             <a href="#" class="close">x</a>
             <h3><c:out value="${popup_label_register}"/></h3>
             <form:form class="pop-up" action="registration" modelAttribute="user" method="post">
-                <form:label  path="username">
+                <form:label path="username">
                     <p class="label_popup"><c:out value="${popup_login}"/></p>
                     <form:input type="text" path="username"/>
                 </form:label>

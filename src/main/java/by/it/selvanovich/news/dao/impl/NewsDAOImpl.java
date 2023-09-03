@@ -32,7 +32,7 @@ public class NewsDAOImpl implements NewsDAO {
                     .createQuery("FROM News n INNER JOIN FETCH n.user ORDER BY n.date DESC", News.class);
 
             return newsQuery.getResultList();
-        }  catch (HibernateException e) {
+        } catch (HibernateException e) {
             throw new DAOException("Hibernate are getting problems with news list", e);
         }
     }
@@ -52,7 +52,7 @@ public class NewsDAOImpl implements NewsDAO {
                     .uniqueResult();
 
             return news;
-        }  catch (HibernateException e) {
+        } catch (HibernateException e) {
             throw new DAOException("Hibernate are getting problems with finding news by id", e);
         }
     }
@@ -63,7 +63,7 @@ public class NewsDAOImpl implements NewsDAO {
             Session currentSession = sessionFactory.getCurrentSession();
 
             return (Integer) currentSession.save(news);
-        }  catch (HibernateException e) {
+        } catch (HibernateException e) {
             throw new DAOException("Hibernate are getting problems with news adding", e);
         }
     }
@@ -74,7 +74,7 @@ public class NewsDAOImpl implements NewsDAO {
             Session currentSession = sessionFactory.getCurrentSession();
 
             currentSession.update(news);
-        }  catch (HibernateException e) {
+        } catch (HibernateException e) {
             throw new DAOException("Hibernate are getting problems with news updating", e);
         }
     }
@@ -87,7 +87,7 @@ public class NewsDAOImpl implements NewsDAO {
 
             currentSession
                     .createQuery("DELETE FROM News news WHERE news.id IN (:newsIds)")
-                    .setParameterList("newsIds",newsIdsList)
+                    .setParameterList("newsIds", newsIdsList)
                     .executeUpdate();
         } catch (HibernateException e) {
             throw new DAOException("Hibernate are getting problems with news deleting", e);

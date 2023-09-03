@@ -24,21 +24,15 @@ public class UserServiceImpl implements UserService {
     private UserDAO userDAO;
 
 
-
-
-    //@Override
     @Transactional
     public User authorization(String username, String password) throws ServiceException {
         try {
             return userDAO.authorization(username, password);
         } catch (DAOException e) {
-            throw new ServiceException(e);
+            throw new ServiceException("Services are getting problems authorization", e);
         }
 
     }
-
-
-    //@Override
 
     @Transactional
     public boolean registration(User user) throws ServiceException {
@@ -51,19 +45,18 @@ public class UserServiceImpl implements UserService {
                 return false;
             }
         } catch (DAOException e) {
-            throw new ServiceException(e);
+            throw new ServiceException("Services are getting problems with registration", e);
         } finally {
             locker.unlock();
         }
     }
-    //@Override
 
     @Transactional
     public User getUserDetails(String username) throws ServiceException {
         try {
             return userDAO.getUserDetails(username);
         } catch (DAOException e) {
-            throw new ServiceException(e);
+            throw new ServiceException("Services are getting problems with user details", e);
         }
     }
     @Transactional
