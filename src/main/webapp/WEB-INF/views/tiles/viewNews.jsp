@@ -46,7 +46,7 @@
 </div>
 
 <div class="second-view-button">
-	<form action="controller" method="post">
+	<form action="doDeleteNews" method="post">
 		<input type="hidden" name="id" value="${sessionScope.news.id}" />
 		<input type="submit" value="<c:out value="${button_delete}" />" />
 	</form>

@@ -6,7 +6,6 @@ import java.util.List;
 
 public interface NewsDAO {
     List<News> getList() throws DAOException;
-    List<News> getListByFilter(int category) throws DAOException;
 
     List<News> getLatestList(int count) throws DAOException;
 
@@ -16,6 +15,6 @@ public interface NewsDAO {
 
     void updateNews(News news) throws DAOException;
 
-    void deleteNewses(String[] idNewses) throws DAOException;
+    void deleteNewses(int[] newsIds) throws DAOException;
 
 }

@@ -16,5 +16,5 @@ public interface NewsService {
 
     boolean addNews(News news) throws ServiceException;
 
-    boolean delete(String[] idNewses) throws ServiceException;
+    boolean delete(int[] newsIds) throws ServiceException;
 }

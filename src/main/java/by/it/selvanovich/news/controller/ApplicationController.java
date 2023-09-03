@@ -19,6 +19,7 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 
 @Controller
@@ -297,6 +298,28 @@ public class ApplicationController {
             } else {
                 request.getSession(true).setAttribute(ERROR, "local.error.name.access_error");
                 return "redirect:" + MAPPING_MAIN;
+            }
+        } catch (ServiceException e) {
+            e.printStackTrace();
+
+            return "redirect:" + ERROR;
+        }
+    }
+
+    @RequestMapping("doDeleteNews")
+    public String doDeleteNews(HttpServletRequest request, @RequestParam("id")String[] idArr) {
+        int[] newsIds = Stream.of(idArr).mapToInt(Integer::parseInt).toArray();
+
+        HttpSession session = request.getSession();
+
+        try {
+            if (accessValidation.haveAdminPermissions(session)) {
+                newsService.delete(newsIds);
+                return "redirect:" + MAPPING_NEWS_LIST;
+            } else {
+                request.setAttribute(ERROR, "local.error.name.access_error");
+
+                return BASE_LAYOUT;
             }
         } catch (ServiceException e) {
             e.printStackTrace();

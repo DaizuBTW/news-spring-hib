@@ -42,7 +42,7 @@ public class NewsServiceImpl implements NewsService {
         try {
             return newsDAO.findById(id);
         } catch (DAOException e) {
-            throw new ServiceException(e);
+            throw new ServiceException("Services are getting problems with finding news by id", e);
         }
     }
 
@@ -81,7 +81,15 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Transactional
-    public boolean delete(String[] idNewses) throws ServiceException {
-        return false;
+    public boolean delete(int[] newsIds) throws ServiceException {
+        locker.lock();
+        try {
+            newsDAO.deleteNewses(newsIds);
+            return true;
+        } catch (DAOException e) {
+            throw new ServiceException("Services are getting problems with deleting news", e);
+        } finally {
+            locker.unlock();
+        }
     }
 }

@@ -57,7 +57,7 @@
 				<input type="submit" value="<c:out value="${button_delete}" />" />
 		</div>
 	</c:if>
-	<c:if test="${requestScope.news eq null}">
+	<c:if test="${requestScope.newsList eq null}">
 		<p>No news.</p>
 	</c:if>
 </form>
