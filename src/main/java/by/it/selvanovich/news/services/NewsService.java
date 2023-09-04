@@ -8,7 +8,7 @@ public interface NewsService {
 
     boolean update(News news) throws ServiceException;
 
-    List<News> latestList(int count) throws ServiceException;
+    List<News> getLatestList(int count) throws ServiceException;
 
     List<News> getList() throws ServiceException;
 

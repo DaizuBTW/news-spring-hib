@@ -24,8 +24,12 @@ public class NewsServiceImpl implements NewsService {
     private NewsDAO newsDAO;
 
     @Transactional
-    public List<News> latestList(int count) throws ServiceException {
-        return null;
+    public List<News> getLatestList(int count) throws ServiceException {
+        try {
+            return newsDAO.getLatestList(count);
+        } catch (DAOException e) {
+            throw new ServiceException("Services are getting problems with latest news list", e);
+        }
     }
 
     @Transactional

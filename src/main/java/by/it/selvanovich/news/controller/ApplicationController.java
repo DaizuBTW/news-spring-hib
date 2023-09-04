@@ -61,86 +61,12 @@ public class ApplicationController {
                 return "redirect:" + NEWS_LIST;
             } else {
                 model.addAttribute(MAPPING_PARAM, GUEST_INFO);
-                request.setAttribute(NEWS_LIST, newsService.getList());
+                request.setAttribute(NEWS_LIST, newsService.getLatestList(5));
                 return BASE_LAYOUT;
             }
         } catch (ServiceException e) {
             return "redirect:" + ERROR;
         }
-    }
-
-    @RequestMapping("/signIn")
-    public String doSignIn(HttpServletRequest request) {
-        String username = request.getParameter(USER_USERNAME_PARAM);
-        String password = request.getParameter(USER_PASSWORD_PARAM);
-
-        try {
-            User user = userService.authorization(username, password);
-            String role = USER_ROLE_GUEST;
-            if (user != null) {
-                role = user.getRole().getTitle();
-            }
-
-            if (!role.equals(USER_ROLE_GUEST)) {
-                request.getSession(true).setAttribute(ATTRIBUTE_USER_STATUS, ATTRIBUTE_ACTIVE);
-                request.getSession().setAttribute(USER_ROLE_PARAM, role);
-                request.getSession().setAttribute(ATTRIBUTE_USER, user);
-                request.getSession().setAttribute(ERROR, null);
-                return "redirect:" + MAIN;
-            } else {
-                request.getSession(true).setAttribute(ATTRIBUTE_USER_STATUS, ATTRIBUTE_NOT_ACTIVE);
-                request.getSession().setAttribute(ERROR, "local.error.name.login_error");
-                return "redirect:" + MAIN + "#signin";
-            }
-        } catch (ServiceException e) {
-            return "redirect:" + ERROR;
-        }
-    }
-
-    @RequestMapping("/signOut")
-    public String doSignOut(HttpServletRequest request) {
-        request.getSession(true).setAttribute(ATTRIBUTE_USER_STATUS, ATTRIBUTE_NOT_ACTIVE);
-        request.getSession().setAttribute(USER_ROLE_PARAM, null);
-
-        return "redirect:" + MAIN;
-    }
-
-    @RequestMapping(value = "/registration", method = RequestMethod.POST)
-    public String signUp(@ModelAttribute("user") User user, HttpServletRequest request) {
-        try {
-            if (userService.registration(user)) {
-                request.getSession(true).setAttribute(ATTRIBUTE_USER_STATUS, ATTRIBUTE_ACTIVE);
-                request.getSession(true).setAttribute(ATTRIBUTE_USER, user);
-                request.getSession().setAttribute(ERROR, null);
-                return "redirect:" + MAIN;
-            } else {
-                request.getSession(true).setAttribute(ERROR, "local.error.name.reg_error");
-                return "redirect:" + MAIN + "#registration";
-            }
-
-        } catch (ServiceException e) {
-            return "redirect:" + ERROR;
-        }
-    }
-
-    @RequestMapping(value = "/userlist")
-    private String goToUserList(HttpServletRequest request, Model model) {
-
-        String presentation = request.getParameter(MAPPING_PARAM);
-        model.addAttribute(MAPPING_PARAM, Objects.requireNonNullElse(presentation, USER_LIST));
-        try {
-            request.setAttribute(ATTRIBUTE_USERS, userService.getUserList());
-        } catch (ServiceException e) {
-            throw new RuntimeException(e);
-        }
-        return BASE_LAYOUT;
-    }
-
-    @RequestMapping("/localization")
-    public String localization(@RequestParam(required = false, value = "local") String local, HttpServletRequest request) {
-        request.getSession(true).setAttribute(ATTRIBUTE_LOCAL, local);
-
-        return "redirect:" + MAIN;
     }
 
     @RequestMapping("/newsList")
@@ -290,5 +216,84 @@ public class ApplicationController {
         } catch (ServiceException e) {
             return "redirect:" + ERROR;
         }
+    }
+
+    @RequestMapping("/signIn")
+    public String doSignIn(HttpServletRequest request) {
+        String username = request.getParameter(USER_USERNAME_PARAM);
+        String password = request.getParameter(USER_PASSWORD_PARAM);
+
+        try {
+            User user = userService.authorization(username, password);
+            String role = USER_ROLE_GUEST;
+            if (user != null) {
+                role = user.getRole().getTitle();
+            }
+
+            if (!role.equals(USER_ROLE_GUEST)) {
+                request.getSession(true).setAttribute(ATTRIBUTE_USER_STATUS, ATTRIBUTE_ACTIVE);
+                request.getSession().setAttribute(USER_ROLE_PARAM, role);
+                request.getSession().setAttribute(ATTRIBUTE_USER, user);
+                request.getSession().setAttribute(ERROR, null);
+                return "redirect:" + MAIN;
+            } else {
+                request.getSession(true).setAttribute(ATTRIBUTE_USER_STATUS, ATTRIBUTE_NOT_ACTIVE);
+                request.getSession().setAttribute(ERROR, "local.error.name.login_error");
+                return "redirect:" + MAIN + "#signin";
+            }
+        } catch (ServiceException e) {
+            return "redirect:" + ERROR;
+        }
+    }
+
+    @RequestMapping("/signOut")
+    public String doSignOut(HttpServletRequest request) {
+        request.getSession(true).setAttribute(ATTRIBUTE_USER_STATUS, ATTRIBUTE_NOT_ACTIVE);
+        request.getSession().setAttribute(USER_ROLE_PARAM, null);
+
+        return "redirect:" + MAIN;
+    }
+
+    @RequestMapping(value = "/registration", method = RequestMethod.POST)
+    public String signUp(@ModelAttribute("user") User user, HttpServletRequest request) {
+        try {
+            if (userService.registration(user)) {
+                request.getSession(true).setAttribute(ATTRIBUTE_USER_STATUS, ATTRIBUTE_ACTIVE);
+                request.getSession(true).setAttribute(ATTRIBUTE_USER, user);
+                request.getSession().setAttribute(ERROR, null);
+                return "redirect:" + MAIN;
+            } else {
+                request.getSession(true).setAttribute(ERROR, "local.error.name.reg_error");
+                return "redirect:" + MAIN + "#registration";
+            }
+
+        } catch (ServiceException e) {
+            return "redirect:" + ERROR;
+        }
+    }
+
+    @RequestMapping(value = "/userlist")
+    private String goToUserList(HttpServletRequest request, Model model) {
+
+        String presentation = request.getParameter(MAPPING_PARAM);
+        model.addAttribute(MAPPING_PARAM, Objects.requireNonNullElse(presentation, USER_LIST));
+        try {
+            request.setAttribute(ATTRIBUTE_USERS, userService.getUserList());
+        } catch (ServiceException e) {
+            throw new RuntimeException(e);
+        }
+        return BASE_LAYOUT;
+    }
+
+    @RequestMapping("/localization")
+    public String localization(@RequestParam(required = false, value = "local") String local, HttpServletRequest request) {
+        request.getSession(true).setAttribute(ATTRIBUTE_LOCAL, local);
+
+        return "redirect:" + MAIN;
+    }
+
+    @RequestMapping("/error")
+    public String goToErrorPage() {
+        return ERROR;
     }
 }

@@ -39,7 +39,17 @@ public class NewsDAOImpl implements NewsDAO {
 
     @Override
     public List<News> getLatestList(int count) throws DAOException {
-        return null;
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
+
+            Query<News> newsQuery = currentSession
+                    .createQuery("FROM News n INNER JOIN FETCH n.user ORDER BY n.date DESC", News.class)
+                    .setMaxResults(count);
+
+            return newsQuery.getResultList();
+        } catch (HibernateException e) {
+            throw new DAOException("Hibernate are getting problems with latest news list", e);
+        }
     }
 
     @Override
