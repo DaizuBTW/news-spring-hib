@@ -7,6 +7,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -18,7 +19,7 @@ public class UserDAOImpl implements UserDAO {
     @Autowired
     private SessionFactory sessionFactory;
 
-    private static final String HQL_USER = "FROM User WHERE username = :username and password = :password";
+    private static final String HQL_USER = "FROM User WHERE username = :username";
 
     @Override
     public User authorization(String username, String password) throws DAOException {
@@ -30,10 +31,14 @@ public class UserDAOImpl implements UserDAO {
 
             User user = theQuery
                     .setParameter("username", username)
-                    .setParameter("password", password)
                     .uniqueResult();
 
-            return user;
+            if (BCrypt.checkpw(password, user.getPassword())) {
+                return user;
+            } else {
+                return null;
+            }
+
         } catch (HibernateException e) {
             throw new DAOException("Hibernate getting problems with sign in", e);
         }
@@ -41,6 +46,8 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public boolean registration(User user) throws DAOException {
+        String password = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
+        user.setPassword(password);
         try {
             Session currentSession = sessionFactory.getCurrentSession();
             currentSession.save(user);
